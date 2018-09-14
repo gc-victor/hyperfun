@@ -1,0 +1,48 @@
+{
+    "name": "@hyperfun/hyperfun",
+    "description": "hyperfun is a JavaScript library based on unidirectional user interface architecture",
+    "version": "1.0.0",
+    "license": "MIT",
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ],
+    "devDependencies": {
+        "chokidar-cli": "1.2.0",
+        "chokidar-socket-emitter": "0.6.0",
+        "concurrently": "3.6.0",
+        "esm": "3.0.72",
+        "express": "4.16.3",
+        "husky": "0.14.3",
+        "lint-staged": "7.2.0",
+        "microbundle": "0.6.0",
+        "prettier": "1.13.7",
+        "proxyquire": "2.0.1",
+        "rollup": "0.63.2",
+        "rollup-plugin-commonjs": "9.1.3",
+        "rollup-plugin-filesize": "2.0.0",
+        "rollup-plugin-node-resolve": "3.3.0",
+        "rollup-plugin-replace": "2.0.0",
+        "rollup-plugin-typescript": "0.8.1",
+        "rollup-plugin-uglify": "4.0.0",
+        "rollup-watch": "4.3.1",
+        "tap": "12.0.1",
+        "ts-node": "6.0.5",
+        "tslint": "5.11.0",
+        "typedoc": "0.11.1",
+        "typescript": "2.8.4",
+        "uglify-es": "3.3.9"
+    },
+    "scripts": {
+        "build:example": "rm -rf ./build && rollup --config rollup.config.js --name hyperfun --input examples/src/$EXAMPLE/$FILE --output.file build/app.js",
+        "example": "concurrently --kill-others --no-color --raw  'yarn build:example --watch' 'SSR=true HMR=true node -r esm examples/config/server.js'",
+        "example:counter": "EXAMPLE=counter FILE=index.js yarn example",
+        "example:min": "EXAMPLE=min FILE=index.ts yarn example",
+        "example:todo": "EXAMPLE=todo FILE=index.ts yarn example",
+        "lint": "tslint --project tsconfig.common.json packages/**/src/*.ts --fix",
+        "test:packages": "make test-all --jobs",
+        "precommit": "lint-staged",
+        "format": "prettier --parser typescript --print-width 80 --write --single-quote --tab-width 4 --trailing-comma es5 --list-different 'packages/**/*.ts'",
+        "release": "npm run build && npm test && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags"
+    }
+}

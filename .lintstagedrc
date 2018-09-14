@@ -1,0 +1,7 @@
+{
+    "*.ts": [
+        "make format-all",
+        "make test-all",
+        "make lint-all"
+    ]
+}

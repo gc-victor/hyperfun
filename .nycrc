@@ -1,0 +1,27 @@
+{
+    "all": true,
+    "branches": 100,
+    "cache": true,
+    "exclude": [
+        "**/*.d.ts",
+        "**/*.interface.ts",
+        "**/*.js",
+        "**/*.test.ts"
+    ],
+    "extension": [
+        ".ts"
+    ],
+    "functions": 100,
+    "include": [
+      "**/*.ts"
+    ],
+    "instrument": true,
+    "lines": 100,
+    "produceSourceMap": true,
+    "require": [
+        "ts-node",
+        "tap"
+    ],
+    "sourceMap": true,
+    "statements": 100
+}

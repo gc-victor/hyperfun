@@ -1,0 +1,9 @@
+{
+    "extends": "../../tsconfig.common.json",
+    "include": [
+        "src/*",
+        "../dom/types/incremental-dom.d.ts",
+        "../dom/types/incremental-dom-string.d.ts",
+        "types/tap.d.ts"
+    ]
+}
