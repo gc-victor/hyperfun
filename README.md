@@ -116,8 +116,8 @@ If it hasn't, just open a [new clear and descriptive issue](../../issues/new).
 Pull requests are the greatest contributions, so be sure they are focused in scope and do avoid unrelated commits.
 
 -   Fork it!
--   Clone your fork: `git clone https://github.com/<your-username>/run`
--   Navigate to the newly cloned directory: `cd run`
+-   Clone your fork: `git clone https://github.com/<your-username>/hyperfun`
+-   Navigate to the newly cloned directory: `cd hyperfun`
 -   Create a new branch for the new feature: `git checkout -b my-new-feature`
 -   Install the tools necessary for development: `npm install`
 -   Make your changes.
