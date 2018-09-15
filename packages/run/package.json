@@ -3,7 +3,16 @@
     "version": "1.0.0",
     "description": "hyperfun is a JavaScript library based on a unidirectional user interface architectures",
     "license": "MIT",
-    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/gc-victor/hyperfun/tree/master/packages/run"
+    },
+    "bugs": {
+        "url": "https://github.com/gc-victor/hyperfun/issues"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
     "main": "dist/run.js",
     "umd:main": "dist/run.umd.js",
     "module": "dist/run.m.js",

@@ -3,7 +3,16 @@
     "version": "1.0.0",
     "description": "hyperfun dom is a JavaScript Functional Incremental DOM library based on HyperScript",
     "license": "MIT",
-    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/gc-victor/hyperfun/tree/master/packages/dom"
+    },
+    "bugs": {
+        "url": "https://github.com/gc-victor/hyperfun/issues"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
     "main": "dist/dom.js",
     "umd:main": "dist/dom.umd.js",
     "module": "dist/dom.m.js",

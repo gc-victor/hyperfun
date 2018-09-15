@@ -3,7 +3,16 @@
     "version": "1.0.0",
     "description": "hyperfun is a JavaScript library based on a unidirectional user interface architectures like Elm's Architecture (Model, Update and View)",
     "license": "MIT",
-    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/gc-victor/hyperfun/tree/master/packages/router"
+    },
+    "bugs": {
+        "url": "https://github.com/gc-victor/hyperfun/issues"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
     "main": "dist/router.js",
     "umd:main": "dist/router.umd.js",
     "module": "dist/router.m.js",

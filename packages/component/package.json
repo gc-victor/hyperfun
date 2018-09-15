@@ -3,7 +3,16 @@
     "version": "1.0.0",
     "description": "hyperfun component is in charge of the component lifecycle",
     "license": "MIT",
-    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/gc-victor/hyperfun/tree/master/packages/component"
+    },
+    "bugs": {
+        "url": "https://github.com/gc-victor/hyperfun/issues"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
     "main": "dist/component.js",
     "umd:main": "dist/component.umd.js",
     "module": "dist/component.m.js",
