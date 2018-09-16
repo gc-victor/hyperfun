@@ -16,6 +16,9 @@ Tiny JavaScript packages to build Front End applications.
 - **dom**: Hyper Script Helpers and Incremental DOM/String mixed to create a template engine that can be rendered on the server and the client
 - **component**: designed to be used in those cases when is needed to re-render a part of the app or when an action has to be executed in the life cycle. It uses Incremental DOM as a dependency to render and update the DOM tree
 
+Globally: 
+[![Build Status](https://img.shields.io/travis/gc-victor/hyperfun/master.svg?style=flat)](https://travis-ci.org/gc-victor/hyperfun)
+
 ## Example:
 
 ```
