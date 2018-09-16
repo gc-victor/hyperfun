@@ -7,13 +7,13 @@ export function microtask(): (fn: Function) => void {
         const node: any = document.createTextNode('');
         const queue: Array<Function> = [];
 
-        new MutationObserver(function() {
+        new MutationObserver(function () {
             while (queue.length) {
                 (queue.shift() as Function)();
             }
         }).observe(node, { characterData: true });
 
-        return function(fn: Function) {
+        return function (fn: Function) {
             queue.push(fn);
             node.data = i = 1 - i;
         };
