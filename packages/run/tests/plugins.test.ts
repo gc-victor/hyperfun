@@ -1,4 +1,4 @@
-#!/usr/bin/env NODE_ENV=ssr ../../node_modules/.bin/ts-node
+#!/usr/bin/env ../../node_modules/.bin/ts-node
 import { test } from 'tap';
 import { RunOptions, State } from '../types';
 import { extend } from '../src/plugins';
