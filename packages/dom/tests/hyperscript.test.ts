@@ -1,4 +1,4 @@
-#!/usr/bin/env NODE_ENV=test ../../node_modules/.bin/ts-node
+#!/usr/bin/env ../../node_modules/.bin/ts-node
 import { test } from 'tap';
 import { patchIDom } from '../src/incremental-dom';
 import * as incrementalDomString from 'incremental-dom-string';

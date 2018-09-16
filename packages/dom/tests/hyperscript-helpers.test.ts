@@ -1,4 +1,4 @@
-#!/usr/bin/env NODE_ENV=test ../../node_modules/.bin/ts-node
+#!/usr/bin/env ../../node_modules/.bin/ts-node
 import { test } from 'tap';
 import * as incrementalDomString from 'incremental-dom-string';
 import * as proxyquire from 'proxyquire';
