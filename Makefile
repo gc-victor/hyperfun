@@ -123,7 +123,7 @@ test :
 		make test-all ;\
 	else \
 		cd $(PACKAGE) || exit $? ;\
-		npm run test || exit $? ;\
+		export NODE_ENV=test && npm run test || exit $? ;\
 		cd ../../ || exit $? ;\
 		([ $$? -eq 0 ] && echo "✓ Tested $(PACKAGE)" || exit 1) ;\
 	fi
