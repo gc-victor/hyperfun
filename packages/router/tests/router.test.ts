@@ -1,4 +1,4 @@
-#!/usr/bin/env ../../node_modules/.bin/ts-node --project tsconfig.test.json
+#!/usr/bin/env ../../node_modules/.bin/ts-node
 // Note: hack to not type the mocks
 declare module './mock-dom';
 

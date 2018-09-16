@@ -33,7 +33,7 @@
         "lint": "../../node_modules/.bin/tslint --project tsconfig.json src/*.ts",
         "lint:watch": "../../node_modules/.bin/chokidar 'yarn lint'",
         "rmrf:dist": "rm -rf ./dist",
-        "test": "../../node_modules/.bin/tap -J tests/*.test.ts",
+        "test": "../../node_modules/.bin/ts-node -P tsconfig.test.json tests/router.test.ts | ../../node_modules/.bin/tap -J",
         "test:progress": "yarn test --reporter=progress",
         "test:watch": "yarn test:progress && ../../node_modules/.bin/chokidar 'src/*.ts' 'tests/*.ts' -c 'yarn test:progress'",
         "tsc": "../../node_modules/.bin/tsc -p ."
