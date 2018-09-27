@@ -20,7 +20,7 @@ Tiny JavaScript packages to build Front End applications.
 
 ## Example:
 
-```
+```js
 import { run, update } from '@hyperfun/run';
 import { h1, li, p, patch, ul } from '@hyperfun/dom';
 
