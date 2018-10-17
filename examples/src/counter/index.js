@@ -8,6 +8,7 @@ import { logs } from './plugins/logs';
 
 const initialState = {
     counter: 0,
+    page: 0,
     title: 'Load time',
 };
 
@@ -22,14 +23,14 @@ const updateOptions = {
 const incrementCounter = () =>
     update({
         type: 'INCREMENT_COUNTER',
-        payload: (state) => ({ counter: state.counter + 1 }),
+        payload: state => ({ counter: state.counter + 1 }),
         options: updateOptions,
     });
 
 const decrementCounter = () =>
     update({
         type: 'DECREMENT_COUNTER',
-        payload: (state) => ({ counter: state.counter - 1 }),
+        payload: state => ({ counter: state.counter - 1 }),
         options: updateOptions,
     });
 
@@ -43,19 +44,19 @@ const resetCounter = () =>
 const incrementPage = () =>
     update({
         type: 'INCREMENT_PAGE',
-        payload: (state) => ({ counter: state.counter + 1 }),
+        payload: state => ({ page: state.page + 1 }),
     });
 
 const decrementPage = () =>
     update({
         type: 'DECREMENT_PAGE',
-        payload: (state) => ({ counter: state.counter - 1 }),
+        payload: state => ({ page: state.page - 1 }),
     });
 
 const resetPage = () =>
     update({
         type: 'RESET_PAGE',
-        payload: () => ({ counter: 0 }),
+        payload: () => ({ page: 0 }),
     });
 
 /* Views */
@@ -65,22 +66,21 @@ const titleRender = element(({ title }) =>
 );
 
 const titleComponent = (props = { title: '' }) =>
-    connect((state) => ({ title: props.title || state.title }))(titleRender);
+    connect(state => ({ title: props.title || state.title }))(titleRender);
 
 const counterRender = element(({ counter }) =>
     h2('.js-counter.ph3.pv2.bg-light-yellow.dark-blue', [`Counter = ${counter} (${date()})`])
 );
 
-const counterComponent = () =>
-    connect((state) => ({ counter: state.counter }))(counterRender);
+const counterComponent = () => connect(state => ({ counter: state.counter }))(counterRender);
 
 const buttonsClasses = 'w-100 f6 tl link dim ph3 pv2 mb2 white bn';
 
-const page = ({ title }, { counter }) =>
+const page = ({ title }, { page }) =>
     article('.pv5', [
         titleComponent({ title }),
         counterComponent(),
-        p('.ph3.pv1.bg-light-yellow.dark-blue', `Page = ${counter} (${date()})`),
+        p('.ph3.pv1.bg-light-yellow.dark-blue', `Page = ${page} (${date()})`),
         ul('.ma0.pa0', [
             li('.list', [
                 button(
