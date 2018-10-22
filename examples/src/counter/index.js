@@ -8,132 +8,166 @@ import { logs } from './plugins/logs';
 
 const initialState = {
     counter: 0,
-    title: 'Load time',
+    title: 'One counter with three controllers',
 };
 
 /* Update */
 
+const SELECTOR_0 = '.js-item-0';
+const SELECTOR_1 = '.js-item-1';
+
 const date = () => new Date().toLocaleTimeString();
-const updateOptions = {
-    element: () => document.querySelector('.js-counter'),
-    view: () => counterComponent(),
-};
+const updateOptions = (selector) => ({
+    element: () => document.querySelector(selector),
+    view: () => counterComponent(selector),
+});
 
-const incrementCounter = () =>
+const incrementItem = (selector) => () =>
     update({
-        type: 'INCREMENT_COUNTER',
+        type: 'INCREMENT_ITEM',
         payload: (state) => ({ counter: state.counter + 1 }),
-        options: updateOptions,
+        options: updateOptions(selector),
     });
 
-const decrementCounter = () =>
+const decrementItem = (selector) => () =>
     update({
-        type: 'DECREMENT_COUNTER',
+        type: 'DECREMENT_ITEM',
         payload: (state) => ({ counter: state.counter - 1 }),
-        options: updateOptions,
+        options: updateOptions(selector),
     });
 
-const resetCounter = () =>
+const resetItem = (selector) => () =>
     update({
-        type: 'RESET_COUNTER',
+        type: 'RESET_ITEM',
         payload: () => ({ counter: 0 }),
-        options: updateOptions,
+        options: updateOptions(selector),
     });
 
-const incrementPage = () =>
+const incrementBoth = () =>
     update({
-        type: 'INCREMENT_PAGE',
+        type: 'INCREMENT_ALL',
         payload: (state) => ({ counter: state.counter + 1 }),
     });
 
-const decrementPage = () =>
+const decrementBoth = () =>
     update({
-        type: 'DECREMENT_PAGE',
+        type: 'DECREMENT_ALL',
         payload: (state) => ({ counter: state.counter - 1 }),
     });
 
-const resetPage = () =>
+const resetBoth = () =>
     update({
-        type: 'RESET_PAGE',
+        type: 'RESET_ALL',
         payload: () => ({ counter: 0 }),
     });
 
 /* Views */
 
 const titleRender = element(({ title }) =>
-    h1('.ph3.pv3.dark-blue.bg-light-yellow', [`${title} ${date()}`])
+    h1('.ph3.pv3.dark-blue.bg-light-yellow', [`${title} (${date()})`])
 );
 
 const titleComponent = (props = { title: '' }) =>
     connect((state) => ({ title: props.title || state.title }))(titleRender);
 
-const counterRender = element(({ counter }) =>
-    h2('.js-counter.ph3.pv2.bg-light-yellow.dark-blue', [`Counter = ${counter} (${date()})`])
+const counterRender = (selector) => element(({ counter }) =>
+    h2(`${selector}.ph3.pv2.bg-light-yellow`, [`Counter = ${counter} (${date()})`])
 );
 
-const counterComponent = () =>
-    connect((state) => ({ counter: state.counter }))(counterRender);
+const counterComponent = (selector) =>
+    connect((state) => ({ counter: state.counter }))(counterRender(selector));
 
 const buttonsClasses = 'w-100 f6 tl link dim ph3 pv2 mb2 white bn';
 
 const page = ({ title }, { counter }) =>
     article('.pv5', [
+        // p('.ph3', 'One counter two controllers'),
         titleComponent({ title }),
-        counterComponent(),
-        p('.ph3.pv1.bg-light-yellow.dark-blue', `Page = ${counter} (${date()})`),
+        // counterComponent(SELECTOR_0),
+        // counterComponent(SELECTOR_1),
+        // p('.ph3.pv1.bg-light-yellow.dark-blue', `Counter = ${counter} (${date()})`),
         ul('.ma0.pa0', [
+            li('.dark-red', [ counterComponent(SELECTOR_0) ]),
             li('.list', [
                 button(
                     {
                         className: `${buttonsClasses} pointer f6 bg-dark-red`,
-                        onClick: incrementCounter,
+                        onClick: incrementItem(SELECTOR_0),
                     },
-                    ['Increment Counter']
+                    ['Increment First Item']
                 ),
             ]),
             li('.list', [
                 button(
                     {
                         className: `${buttonsClasses} pointer bg-dark-red`,
-                        onClick: decrementCounter,
+                        onClick: decrementItem(SELECTOR_0),
                     },
-                    ['Decrement Counter']
+                    ['Decrement First Item']
                 ),
             ]),
             li('.list', [
                 button(
                     {
                         className: `${buttonsClasses} pointer h3 bg-red`,
-                        onClick: resetCounter,
+                        onClick: resetItem(SELECTOR_0),
                     },
-                    ['Reset Counter']
+                    ['Reset First Item']
+                ),
+            ]),
+            li('.dark-blue', [ counterComponent(SELECTOR_1) ]),
+            li('.list', [
+                button(
+                    {
+                        className: `${buttonsClasses} pointer f6 bg-dark-blue`,
+                        onClick: incrementItem(SELECTOR_1),
+                    },
+                    ['Increment Second Item']
                 ),
             ]),
             li('.list', [
                 button(
                     {
                         className: `${buttonsClasses} pointer bg-dark-blue`,
-                        onClick: incrementPage,
+                        onClick: decrementItem(SELECTOR_1),
                     },
-                    ['Increment Page']
-                ),
-            ]),
-            li('.list', [
-                button(
-                    {
-                        className: `${buttonsClasses} pointer bg-dark-blue`,
-                        onClick: decrementPage,
-                    },
-                    ['Decrement Page']
+                    ['Decrement Second Item']
                 ),
             ]),
             li('.list', [
                 button(
                     {
                         className: `${buttonsClasses} pointer h3 bg-blue`,
-                        onClick: resetPage,
+                        onClick: resetItem(SELECTOR_1),
                     },
-                    ['Reset Page']
+                    ['Reset Second Item']
+                ),
+            ]),
+            li('.list', [
+                button(
+                    {
+                        className: `${buttonsClasses} pointer bg-dark-green`,
+                        onClick: incrementBoth,
+                    },
+                    ['Increment Both']
+                ),
+            ]),
+            li('.list', [
+                button(
+                    {
+                        className: `${buttonsClasses} pointer bg-dark-green`,
+                        onClick: decrementBoth,
+                    },
+                    ['Decrement Both']
+                ),
+            ]),
+            li('.list', [
+                button(
+                    {
+                        className: `${buttonsClasses} pointer h3 bg-green`,
+                        onClick: resetBoth,
+                    },
+                    ['Reset Both']
                 ),
             ]),
         ]),
@@ -207,7 +241,7 @@ setInterval(() => {
         }
         return standIn;
     }
-}, 1);
+}, 1000);
 */
 
 /* Run */
