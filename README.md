@@ -113,6 +113,13 @@ Now, take a moment to be sure your contributions make sense to everyone else.
 Found a problem? Want a new feature? First of all, see if your issue or idea has [already been reported](../../issues).
 If it hasn't, just open a [new clear and descriptive issue](../../issues/new).
 
+### Commit message conventions
+
+We are following *AngularJS Git Commit Message Conventions*. This leads to more readable messages that are easy to follow when looking through the project history.
+
+- [AngularJS Git Commit Message Conventions](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#heading=h.uyo6cb12dt6w)
+- [Commit Message Guidelines](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit)
+
 ### Submitting pull requests
 
 Pull requests are the greatest contributions, so be sure they are focused in scope and do avoid unrelated commits.
