@@ -2,6 +2,15 @@
 
 Hyper Script Helpers and Incremental DOM/String mixed to create a template engine that can be rendered on the server and the client.
 
+## Install
+
+You can use npm or yarn to install it.
+
+`$ npm install --save @hyperfun/dom`
+
+`$ yarn add @hyperfun/dom`
+
+
 ## Tags
 
 Can be used any HTML tag as a tagName to create an HTMLElement.

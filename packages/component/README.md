@@ -2,6 +2,15 @@
 
 Has been designed to be used in those cases when is needed to re-render a part of the app or when an action has to be executed in the life cycle. It uses @hyperfun/dom as a dependency to render and update the DOM tree.
 
+## Install
+
+You can use npm or yarn to install it.
+
+`$ npm install --save @hyperfun/component`
+
+`$ yarn add @hyperfun/component`
+
+
 ## Element
 
 Used to manage an element lifecycle. The update would be only executed from outside with new props. Once the rendered element is removed from the DOM, will be executed detached. 

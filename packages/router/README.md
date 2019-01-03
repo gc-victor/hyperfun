@@ -2,6 +2,15 @@
 
 hyperfun plugin to integrate a router in your hyperfun applications.
 
+## Install
+
+You can use npm or yarn to install it.
+
+`$ npm install --save @hyperfun/router`
+
+`$ yarn add @hyperfun/router`
+
+
 ## Router
 
 Middleware to initialize the router functionality

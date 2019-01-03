@@ -2,6 +2,14 @@
 
 Template agnostic package to create unidirectional user interface architecture.
 
+## Install
+
+You can use npm or yarn to install it.
+
+`$ npm install --save @hyperfun/run`
+
+`$ yarn add @hyperfun/run`
+
 ## Run
 
 Initialize the application.
