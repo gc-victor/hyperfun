@@ -17,26 +17,26 @@ const SELECTOR_0 = '.js-item-0';
 const SELECTOR_1 = '.js-item-1';
 
 const date = () => new Date().toLocaleTimeString();
-const updateOptions = (selector) => ({
+const updateOptions = selector => ({
     element: () => document.querySelector(selector),
-    view: () => counterComponent(selector),
+    view: () => (selector === SELECTOR_0 ? counterComponent0() : counterComponent1()),
 });
 
-const incrementItem = (selector) => () =>
+const incrementItem = selector => () =>
     update({
         type: 'INCREMENT_ITEM',
-        payload: (state) => ({ counter: state.counter + 1 }),
+        payload: state => ({ counter: state.counter + 1 }),
         options: updateOptions(selector),
     });
 
-const decrementItem = (selector) => () =>
+const decrementItem = selector => () =>
     update({
         type: 'DECREMENT_ITEM',
-        payload: (state) => ({ counter: state.counter - 1 }),
+        payload: state => ({ counter: state.counter - 1 }),
         options: updateOptions(selector),
     });
 
-const resetItem = (selector) => () =>
+const resetItem = selector => () =>
     update({
         type: 'RESET_ITEM',
         payload: () => ({ counter: 0 }),
@@ -46,13 +46,13 @@ const resetItem = (selector) => () =>
 const incrementBoth = () =>
     update({
         type: 'INCREMENT_ALL',
-        payload: (state) => ({ counter: state.counter + 1 }),
+        payload: state => ({ counter: state.counter + 1 }),
     });
 
 const decrementBoth = () =>
     update({
         type: 'DECREMENT_ALL',
-        payload: (state) => ({ counter: state.counter - 1 }),
+        payload: state => ({ counter: state.counter - 1 }),
     });
 
 const resetBoth = () =>
@@ -68,26 +68,27 @@ const titleRender = element(({ title }) =>
 );
 
 const titleComponent = (props = { title: '' }) =>
-    connect((state) => ({ title: props.title || state.title }))(titleRender);
+    connect(state => ({ title: props.title || state.title }))(titleRender);
 
-const counterRender = (selector) => element(({ counter }) =>
-    h2(`${selector}.ph3.pv2.bg-light-yellow`, [`Counter = ${counter} (${date()})`])
-);
+const counterRender = selector =>
+    element(({ counter }) =>
+        h2(`${selector}.ph3.pv2.bg-light-yellow`, [`Counter = ${counter} (${date()})`])
+    );
 
-const counterComponent = (selector) =>
-    connect((state) => ({ counter: state.counter }))(counterRender(selector));
+const counterRender0 = counterRender(SELECTOR_0);
+const counterRender1 = counterRender(SELECTOR_1);
+
+const counterComponent0 = () => connect(state => ({ counter: state.counter }))(counterRender0);
+
+const counterComponent1 = () => connect(state => ({ counter: state.counter }))(counterRender1);
 
 const buttonsClasses = 'w-100 f6 tl link dim ph3 pv2 mb2 white bn';
 
 const page = ({ title }, { counter }) =>
     article('.pv5', [
-        // p('.ph3', 'One counter two controllers'),
         titleComponent({ title }),
-        // counterComponent(SELECTOR_0),
-        // counterComponent(SELECTOR_1),
-        // p('.ph3.pv1.bg-light-yellow.dark-blue', `Counter = ${counter} (${date()})`),
         ul('.ma0.pa0', [
-            li('.dark-red', [ counterComponent(SELECTOR_0) ]),
+            li('.dark-red', [counterComponent0()]),
             li('.list', [
                 button(
                     {
@@ -115,7 +116,7 @@ const page = ({ title }, { counter }) =>
                     ['Reset First Item']
                 ),
             ]),
-            li('.dark-blue', [ counterComponent(SELECTOR_1) ]),
+            li('.dark-blue', [counterComponent1()]),
             li('.list', [
                 button(
                     {
