@@ -1,0 +1,15 @@
+{
+    "globals": {
+        "incremental-dom": {
+            "cdn": "https://unpkg.com/incremental-dom@0.7.0/dist/incremental-dom-min.js",
+            "window": "IncrementalDOM"
+        },
+        "incremental-dom-string": {
+            "cdn": "https://unpkg.com/incremental-dom@0.7.0/dist/incremental-dom-min.js",
+            "window": "IncrementalDOMString"
+        }
+    },
+    "html": "examples/index.html",
+    "input": "examples",
+    "js": "examples/index.js"
+}

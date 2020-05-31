@@ -1,142 +1,71 @@
-BINDIR=node_modules/.bin
-MICROBUNDLE=$(BINDIR)/microbundle
-TSLINT=$(BINDIR)/tslint
-
 ARG=$(filter-out $@,$(MAKECMDGOALS))
-PACKAGE=packages/$(ARG)
-PACKAGE_VERSION=$(shell node -p -e 'require("./$(PACKAGE)/package.json").version')
+PACKAGE_VERSION=$(shell node -p -e 'require("./src/package.json").version')
 
-help :
-	@echo "Available commands for hyperfun.js monorepo:"
-	@echo ""
-	@echo "  make dist <package>\t\tbuild dist for <package> only (e.g. 'make dist run')"
-	@echo "  make dist-all\t\t\tbuild everything"
-	@echo "  make example <example>t\texecute example"
-	@echo "  make format-all\t\tformat all packages"
-	@echo "  make format <package>\t\tformat just <package> (e.g. 'make format dom')"
-	@echo "  make lint-all\t\t\tlint all packages"
-	@echo "  make lint <package>\t\tlint just <package> (e.g. 'make lint dom')"
-	@echo "  make release-minor <package>\trelease a new minor version of <package>"
-	@echo "  make release-major <package>\trelease a new major version of <package>"
-	@echo "  make test\t\t\ttest everything"
-	@echo "  make test <package>\t\ttest just <package>  (e.g. 'make test run')"
-	@echo "  make test:watch <package>\ttest just <package>  (e.g. 'make test:watch run')"
-	@echo ""
+help: ## Show this help message
+	@echo 'usage: make [target] <type> <name>'
+	@echo
+	@echo 'Targets:'
+	@egrep '^(.+)\:\ ##\ (.+)' ${MAKEFILE_LIST} | column -t -c 2 -s ':#'
 
-dist :
-	@if [ "$(ARG)" = "" ]; then \
-		echo "Error: please call 'make dist' with an argument, like 'make dist run'" ;\
+browser : static ## Run a browser example
+	npx @dev-pack/dev-pack start;\
+
+build : ## Build distribution files
+	npx tsdx build || exit $? ; \
+
+coverage :
+	if [ ! -d "./coverage" ]; then \
+		echo "You have to execute first 'make test-coverage'" ; \
 	else \
-		rm -rf $(PACKAGE)/dist/ ;\
-		cd $(PACKAGE) || exit $? ;\
-		../../$(MICROBUNDLE) build -i src/index.ts --name $(PACKAGE) || exit $? ; \
-		cd ../../ || exit $? ; \
-		([ $$? -eq 0 ] && echo "✓ Builded $(ARG) distribution files" || exit 1) ;\
-	fi
+		cd coverage ; \
+		python -m SimpleHTTPServer 8000 ; \
+	fi ;\
 
-dist-all :
-	@if [ "$(ARG)" = "" ]; then \
-		while read d ; do \
-			echo "Compiling $$d" ; \
-			make dist $$d || exit $? ;\
-		done < .scripts/PACKAGES ; \
-		([ $$? -eq 0 ] && echo "✓ Builded $$d distribution files" || exit 1) ;\
-	fi
+gzip-size:
+	npx gzip-size-cli dist/hyperfun.cjs.production.min.js || exit $? ; \
 
-example :
-	@if [ "$(ARG)" = "" ]; then \
-		echo "Error: please call 'make example' with an argument, like 'make example counter'" ;\
-	else \
-		npm run example:$(ARG) ;\
-	fi
+format : ## Enforces a consistent style by parsing your code and re-printing it
+	npx prettier --write "{src,test}/**/*.ts" ;\
 
-format :
-	@if [ "$(ARG)" = "" ]; then \
-		echo "Error: please call 'make format' with an argument, like 'make format run'" ;\
-	else \
-		$(BINDIR)/prettier --write "packages/$(ARG)/{src,test}/**/*.ts" ;\
-	fi
+lint : ## Linting utility
+	npx tsdx lint --fix ;\
 
-format-all :
-	@if [ "$(ARG)" = "" ]; then \
-		while read d ; do \
-			echo "Format $$d" ; \
-			make format $$d || exit $? ;\
-		done < .scripts/PACKAGES ; \
-		([ $$? -eq 0 ] && echo "✓ Formatted files" || exit 1) ;\
-	fi
+precommit: lint format test
 
-lint :
-	@if [ "$(ARG)" = "" ]; then \
-		make lint-all ;\
-	else \
-		cd $(PACKAGE) && ../../$(TSLINT) --fix --config ../../tslint.json --project tsconfig.json &&\
-		echo "✓ TSLint $(PACKAGE) passed" ;\
-	fi
+release : ## Common release
+	git add -A || exit $? ;\
+	git commit -m 'release: $(PACKAGE_VERSION)' || exit $? ;\
+	git push origin master || exit $? ;\
+	git tag $(PACKAGE_VERSION) || exit $? ;\
+	git push --tags || exit $? ;\
+	npm publish || exit $? ;\
+	([ $$? -eq 0 ] && echo "✓ Released $(PACKAGE_VERSION)" || exit 1) ;\
 
-lint-all :
-	.scripts/lint-all.sh
+release-minor : ## Minor release
+	make test || exit $? ;\
+	make dist || exit $? ;\
+	npm version minor || exit $? ;\
+	make release || exit $? ;\
+	([ $$? -eq 0 ] && echo "✓ Released new minor-$(PACKAGE_VERSION)" || exit 1) ;\
 
-release :
-	@if [ "$(ARG)" = "" ]; then \
-		echo "Error: No package defined" ;\
-	else \
-		git add -A || exit $? ;\
-		git commit -m 'release($(ARG)): $(PACKAGE_VERSION)' || exit $? ;\
-		git push origin master || exit $? ;\
-		git tag $(ARG)-$(PACKAGE_VERSION) || exit $? ;\
-		git push --tags || exit $? ;\
-		cd $(PACKAGE) || exit $? ;\
-		npm publish || exit $? ;\
-		cd ../../ || exit $? ;\
-		([ $$? -eq 0 ] && echo "✓ Released $(ARG) $(PACKAGE_VERSION)" || exit 1) ;\
-	fi
+release-major : ## Major release
+	make test || exit $? ;\
+	make dist || exit $? ;\
+	npm version major || exit $? ;\
+	make release || exit $? ;\
+	([ $$? -eq 0 ] && echo "✓ Released new major-$(PACKAGE_VERSION)" || exit 1) ;\
 
-release-minor :
-	@if [ "$(ARG)" = "" ]; then \
-		echo "Error: please call 'make release-minor' with an argument, like 'make release-minor run'" ;\
-	else \
-		make test $(ARG) || exit $? ;\
-		make dist $(ARG) || exit $? ;\
-		cd $(PACKAGE) || exit $? ;\
-		npm version minor || exit $? ;\
-		cd ../../ || exit $? ;\
-		make release  $(ARG) || exit $? ;\
-		([ $$? -eq 0 ] && echo "✓ Released new minor $(ARG)-$(PACKAGE_VERSION)" || exit 1) ;\
-fi
+static : ## Run a static example
+	node -r esm examples/static.js; \
 
-release-major :
-	@if [ "$(ARG)" = "" ]; then \
-		echo "Error: please call 'make release-major' with an argument, like 'make release-major run'" ;\
-	else \
-		make test $(ARG) || exit $? ;\
-		make dist $(ARG) || exit $? ;\
-		cd $(PACKAGE) || exit $? ;\
-		npm version major || exit $? ;\
-		cd ../../ || exit $? ;\
-		make release  $(ARG) || exit $? ;\
-		([ $$? -eq 0 ] && echo "✓ Released new major $(ARG)-$(PACKAGE_VERSION)" || exit 1) ;\
-fi
+test : ## Run tests
+	npx tsdx test ;\
 
-test :
-	@if [ "$(ARG)" = "" ]; then \
-		make test-all ;\
-	else \
-		cd $(PACKAGE) || exit $? ;\
-		export NODE_ENV=test && npm run test || exit $? ;\
-		cd ../../ || exit $? ;\
-		([ $$? -eq 0 ] && echo "✓ Tested $(PACKAGE)" || exit 1) ;\
-	fi
+test-watch : ## Run tests and watch changes
+	npx jest --watchAll ;\
 
-test-watch :
-	@if [ "$(ARG)" = "" ]; then \
-		echo "Error: No package defined" ;\
-	else \
-		cd $(PACKAGE) && npm run test:watch && ([ $$? -eq 0 ] && echo "✓ Tested $(PACKAGE)") || exit 1;\
-	fi
-
-test-all :
-	.scripts/test-all.sh
+watch : ## Execute dist and watch
+	npx tsdx watch ; \
 
 # catch anything and do nothing
 %:
